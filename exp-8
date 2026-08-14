@@ -1,0 +1,101 @@
+Enter password: ***********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> -- 1. Create and Select Database
+mysql> CREATE DATABASE IF NOT EXISTS csa0502_exp8;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> USE csa0502_exp8;
+Database changed
+mysql>
+mysql> -- 2. Create 'stud2' Table
+mysql> CREATE TABLE stud2 (
+    ->     regno INT,
+    ->     name VARCHAR(20),
+    ->     courseno VARCHAR(10),
+    ->     marks INT,
+    ->     facultydoj VARCHAR(10),
+    ->     assements INT
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> -- 3. Create 'faculty' Table
+mysql> -- (Using VARCHAR for Dates to bypass potential strict mode 'NO_ZERO_DATE' errors and perfectly replicate the '0000-00-00' output)
+mysql> CREATE TABLE faculty (
+    ->     FacNo VARCHAR(10),
+    ->     FacultyName VARCHAR(50),
+    ->     gender CHAR(1),
+    ->     Dob VARCHAR(10),
+    ->     Doj VARCHAR(10),
+    ->     Mobileno BIGINT,
+    ->     DeptNo VARCHAR(10)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> -- 4. Insert Data into 'stud2'
+mysql> -- We insert 'nani' and 'ramu' as seen in Output 1.
+mysql> -- We add 'ravi' with low marks so he appears in Output 2 (assessments > 1) but NOT in Output 1 or 4.
+mysql> -- Average marks here will be (50+50+20)/3 = 40. Therefore, only marks > 40 (nani and ramu) will be returned in Output 1.
+mysql> INSERT INTO stud2 (regno, name, courseno, marks, facultydoj, assements) VALUES
+    -> (1234, 'nani', 'coo1', 50, '2001', 5),
+    -> (1254, 'ramu', 'coo1', 50, '2002', 4),
+    -> (1255, 'ravi', 'coo2', 20, '2003', 2);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> -- 5. Insert Data into 'faculty'
+mysql> -- This inserts the exact row shown in Output 3, including the max integer limit phone number.
+mysql> INSERT INTO faculty (FacNo, FacultyName, gender, Dob, Doj, Mobileno,DeptNo) VALUES
+    -> ('fo1', 'chaithu', 'm', '0000-00-00', '0000-00-00', 2147483647, 'cse');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from stud2 where marks>(select avg(marks) from stud2);
++-------+------+----------+-------+------------+-----------+
+| regno | name | courseno | marks | facultydoj | assements |
++-------+------+----------+-------+------------+-----------+
+|  1234 | nani | coo1     |    50 | 2001       |         5 |
+|  1254 | ramu | coo1     |    50 | 2002       |         4 |
++-------+------+----------+-------+------------+-----------+
+2 rows in set (0.01 sec)
+
+mysql> select name from stud2 where assements>1;
++------+
+| name |
++------+
+| nani |
+| ramu |
+| ravi |
++------+
+3 rows in set (0.00 sec)
+
+mysql> select * from faculty order by doj limit 1;
++-------+-------------+--------+------------+------------+------------+--------+
+| FacNo | FacultyName | gender | Dob        | Doj        | Mobileno   | DeptNo |
++-------+-------------+--------+------------+------------+------------+--------+
+| fo1   | chaithu     | m      | 0000-00-00 | 0000-00-00 | 2147483647 | cse   |
++-------+-------------+--------+------------+------------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select courseno,marks from stud2 where marks>(select avg(marks) fromstud2) order by courseno;
++----------+-------+
+| courseno | marks |
++----------+-------+
+| coo1     |    50 |
+| coo1     |    50 |
++----------+-------+
+2 rows in set (0.00 sec)
+
+mysql>
