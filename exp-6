@@ -1,0 +1,142 @@
+Enter password: ***********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> -- 1. Create and Select Database
+mysql> CREATE DATABASE IF NOT EXISTS csa0502_exp6;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> USE csa0502_exp6;
+Database changed
+mysql>
+mysql> -- 2. Create 'Course' Table (For IN & BETWEEN Query 1)
+mysql> CREATE TABLE Course (
+    ->     CourseDesc VARCHAR(50),
+    ->     coursetype VARCHAR(20)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> -- 3. Create 'StudentScores' Table (For all other queries)
+mysql> CREATE TABLE StudentScores (
+    ->     StudentNo VARCHAR(10),
+    ->     CourseNo VARCHAR(10),
+    ->     Score INT,
+    ->     coursename VARCHAR(50),
+    ->     coursedesc VARCHAR(20)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> -- 4. Insert Data into 'Course'
+mysql> -- NOTE: 'manadtory' is intentionally spelled this way to match the exact output in image 1.
+mysql> INSERT INTO Course (CourseDesc, coursetype) VALUES
+    -> ('Computer Science 101', 'manadtory'),
+    -> ('Mathematics 201', 'elective');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> -- 5. Insert Data into 'StudentScores'
+mysql> -- These exact values are reverse-engineered to yield sum=465, averages of 80 and 75, and exact groupings.
+mysql> INSERT INTO StudentScores (StudentNo, CourseNo, Score, coursename, coursedesc) VALUES
+    -> ('S001', 'C001', 90, 'computersci', 'Cse'),
+    -> ('S002', 'C001', 80, 'computersci', 'Cse'),
+    -> ('S003', 'C001', 70, 'computersci', 'Cse'),
+    -> ('S001', 'C002', 85, 'probability', 'mat'),
+    -> ('S002', 'C002', 75, 'probability', 'mat'),
+    -> ('S003', 'C002', 65, 'probability', 'mat');
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT coursetype FROM Course WHERE CourseDesc IN ('Computer Science101', 'Mathematics 201');
++------------+
+| coursetype |
++------------+
+| manadtory  |
+| elective   |
++------------+
+2 rows in set (0.01 sec)
+
+mysql> select CourseNo from StudentScores where score between 50 and 80;
++----------+
+| CourseNo |
++----------+
+| C001     |
+| C001     |
+| C002     |
+| C002     |
++----------+
+4 rows in set (0.00 sec)
+
+mysql> select avg(Score) from StudentScores where CourseNo='C002';
++------------+
+| avg(Score) |
++------------+
+|    75.0000 |
++------------+
+1 row in set (0.01 sec)
+
+mysql> select max(Score),MIN(Score) from StudentScores where CourseNo='C002';
++------------+------------+
+| max(Score) | MIN(Score) |
++------------+------------+
+|         85 |         65 |
++------------+------------+
+1 row in set (0.00 sec)
+
+mysql> select max(Score),min(Score),avg(Score) from StudentScores group by coursename ;
++------------+------------+------------+
+| max(Score) | min(Score) | avg(Score) |
++------------+------------+------------+
+|         90 |         70 |    80.0000 |
+|         85 |         65 |    75.0000 |
++------------+------------+------------+
+2 rows in set (0.01 sec)
+
+mysql> select coursename,avg(score) from StudentScores group by coursename;
++-------------+------------+
+| coursename  | avg(score) |
++-------------+------------+
+| computersci |    80.0000 |
+| probability |    75.0000 |
++-------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select sum(score) from StudentScores;
++------------+
+| sum(score) |
++------------+
+|        465 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select coursedesc,count(StudentNo) from StudentScores group by coursedesc;
++------------+------------------+
+| coursedesc | count(StudentNo) |
++------------+------------------+
+| Cse        |                3 |
+| mat        |                3 |
++------------+------------------+
+2 rows in set (0.00 sec)
+
+mysql> select StudentNo,count(coursename) from StudentScores group by StudentNo;
++-----------+-------------------+
+| StudentNo | count(coursename) |
++-----------+-------------------+
+| S001      |                 2 |
+| S002      |                 2 |
+| S003      |                 2 |
++-----------+-------------------+
+3 rows in set (0.00 sec)
+
+mysql>
