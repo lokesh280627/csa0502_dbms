@@ -1,0 +1,96 @@
+Enter password: ***********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 16
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE IF NOT EXISTS csa0502_exp9;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> USE csa0502_exp9;
+Database changed
+mysql>
+mysql> CREATE TABLE faculty (
+    ->     facno VARCHAR(10),
+    ->     facname VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql>
+mysql> CREATE TABLE department (
+    ->     deptno VARCHAR(10),
+    ->     deptname VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+mysql>
+mysql> CREATE TABLE course (
+    ->     courseno VARCHAR(10)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql>
+mysql> CREATE TABLE student (
+    ->     name VARCHAR(50),
+    ->     marks INT,
+    ->     course VARCHAR(10)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql>
+mysql> INSERT INTO faculty (facno, facname) VALUES
+    -> ('802', 'Ratnam');
+Query OK, 1 row affected (0.00 sec)
+
+mysql>
+mysql> INSERT INTO department (deptno, deptname) VALUES
+    -> ('11', 'Sales');
+Query OK, 1 row affected (0.00 sec)
+
+mysql>
+mysql> INSERT INTO course (courseno) VALUES
+    -> ('C00');
+Query OK, 1 row affected (0.00 sec)
+
+mysql>
+mysql> INSERT INTO student (name, marks, course) VALUES
+    -> ('Ramu', 0, 'C00'),
+    -> ('Geetha', 0, 'C00'),
+    -> ('Pooja', 0, 'C00');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select faculty.facno,faculty.facname,department.deptno,department.deptname from faculty cross join department;
++-------+---------+--------+----------+
+| facno | facname | deptno | deptname |
++-------+---------+--------+----------+
+| 802   | Ratnam  | 11     | Sales    |
++-------+---------+--------+----------+
+1 row in set (0.01 sec)
+
+mysql> select student.name,student.marks,course.courseno from student innerjoin course on student.course=course.courseno;
++--------+-------+----------+
+| name   | marks | courseno |
++--------+-------+----------+
+| Ramu   |     0 | C00      |
+| Geetha |     0 | C00      |
+| Pooja  |     0 | C00      |
++--------+-------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select faculty.facno,faculty.facname,department.deptno,department.deptname from faculty cross join department;
++-------+---------+--------+----------+
+| facno | facname | deptno | deptname |
++-------+---------+--------+----------+
+| 802   | Ratnam  | 11     | Sales    |
++-------+---------+--------+----------+
+1 row in set (0.00 sec)
+
+mysql>
