@@ -1,0 +1,206 @@
+Enter password: ***********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE IF NOT EXISTS csa0502_db;
+Query OK, 1 row affected (0.17 sec)
+
+mysql> USE csa0502_db;
+Database changed
+mysql> -- Create student table
+mysql> CREATE TABLE student (
+    ->     Reg_no VARCHAR(20) PRIMARY KEY,
+    ->     Name VARCHAR(50),
+    ->     Gender VARCHAR(5),
+    ->     DOB DATE,
+    ->     Mobile_no VARCHAR(15),
+    ->     City VARCHAR(50),
+    ->     courseno VARCHAR(10)
+    -> );
+Query OK, 0 rows affected (0.15 sec)
+
+mysql>
+mysql> -- Create faculty table
+mysql> CREATE TABLE faculty (
+    ->     facno VARCHAR(20) PRIMARY KEY,
+    ->     facname VARCHAR(50),
+    ->     Gender CHAR(1),
+    ->     DOB DATE,
+    ->     DOJ DATE,
+    ->     Mobileno VARCHAR(15),
+    ->     deptno VARCHAR(10),
+    ->     resiged CHAR(1),
+    ->     age INT
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> -- Create course table
+mysql> CREATE TABLE course (
+    ->     courseno VARCHAR(10) PRIMARY KEY,
+    ->     coursedesc VARCHAR(50),
+    ->     coursetype CHAR(1),
+    ->     semno INT,
+    ->     hallno VARCHAR(10),
+    ->     facno VARCHAR(10)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE student (
+    ->     Reg_no VARCHAR(20) PRIMARY KEY,
+    ->     Name VARCHAR(50),
+    ->     Gender VARCHAR(5),
+    ->     DOB DATE,
+    ->     Mobile_no VARCHAR(15),
+    ->     City VARCHAR(50),
+    ->     courseno VARCHAR(10)
+    -> );
+ERROR 1050 (42S01): Table 'student' already exists
+mysql> INSERT INTO student (Reg_no, Name, Gender, DOB, Mobile_no, City, courseno) VALUES
+    -> ('19221151', 'mohan', 'm', '2004-01-12', '998263541', 'chittoor', 'C002'),
+    -> ('19221152', 'raju', 'm', '2005-02-13', '998263542', 'chittoor', 'C002'),
+    -> ('19221153', 'ramesh', 'm', '2005-03-14', '998263548', 'mnr', 'C002'),
+    -> ('19221154', 'ram', 'm', '2006-04-14', '908269279', 'mgr', 'C002'),
+    -> ('19221155', 'san', 'm', '2007-05-17', '998263545', 'chittoor', 'C002'),
+    -> ('192219184', 'siri', 'f', '2004-01-12', '891938534', 'chittoor', 'C002'),
+    -> ('1922211123', 'PUMA', 'M', '2004-12-15', '987654329', 'SALT', 'C001'),
+    -> ('1922211125', 'SUMA', 'F', '2004-08-24', '987654323', 'BASAL', 'C001'),
+    -> ('1922211156', 'RAMA', 'F', '2004-02-14', '876543297', 'KADAPA', 'C002'),
+    -> ('1922211198', 'HEMANTH', 'M', '2004-06-17', '986534256', 'VIZAG', 'C001');
+Query OK, 10 rows affected (0.03 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO faculty (facno, facname, Gender, DOB, DOJ, Mobileno, deptno, resiged, age) VALUES
+    -> ('1191151', 'mohan', 'm', '2004-01-12', '2010-05-23', '990826973', 'mtr', 'y', 59),
+    -> ('1f1922112', 'raju', 'm', '2005-02-13', '2009-06-25', '90865894', 'mgr', 'y', 45),
+    -> ('1191153', 'suresh', 'm', '1985-08-20', '2015-01-10', '987654321', 'cse', 'n', 39);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO course (courseno, coursedesc, coursetype, semno, hallno,facno) VALUES
+    -> ('CS101', 'Intro to Programming', 'L', 1, 'H001', 'F001'),
+    -> ('CS201', 'Computer Science 201', 'L', 2, 'H002', 'F001'),
+    -> ('MA101', 'Mathematics 101', 'L', 1, 'H003', 'F002'),
+    -> ('MA201', 'Mathematics 201', 'L', 2, 'H004', 'F002'),
+    -> ('PH101', 'Physics 101', 'L', 1, 'H005', 'F003');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select Reg_no,Name,DOB from student ;
++------------+---------+------------+
+| Reg_no     | Name    | DOB        |
++------------+---------+------------+
+| 19221151   | mohan   | 2004-01-12 |
+| 19221152   | raju    | 2005-02-13 |
+| 19221153   | ramesh  | 2005-03-14 |
+| 19221154   | ram     | 2006-04-14 |
+| 19221155   | san     | 2007-05-17 |
+| 192219184  | siri    | 2004-01-12 |
+| 1922211123 | PUMA    | 2004-12-15 |
+| 1922211125 | SUMA    | 2004-08-24 |
+| 1922211156 | RAMA    | 2004-02-14 |
+| 1922211198 | HEMANTH | 2004-06-17 |
++------------+---------+------------+
+10 rows in set (0.01 sec)
+
+mysql> select* from student where Gender='f';
++------------+------+--------+------------+-----------+----------+----------+
+| Reg_no     | Name | Gender | DOB        | Mobile_no | City     | courseno|
++------------+------+--------+------------+-----------+----------+----------+
+| 192219184  | siri | f      | 2004-01-12 | 891938534 | chittoor | C002|
+| 1922211125 | SUMA | F      | 2004-08-24 | 987654323 | BASAL    | C001|
+| 1922211156 | RAMA | F      | 2004-02-14 | 876543297 | KADAPA   | C002|
++------------+------+--------+------------+-----------+----------+----------+
+3 rows in set (0.02 sec)
+
+mysql> select * from student where courseno="C001";
++------------+---------+--------+------------+-----------+-------+----------+
+| Reg_no     | Name    | Gender | DOB        | Mobile_no | City  | courseno|
++------------+---------+--------+------------+-----------+-------+----------+
+| 1922211123 | PUMA    | M      | 2004-12-15 | 987654329 | SALT  | C001|
+| 1922211125 | SUMA    | F      | 2004-08-24 | 987654323 | BASAL | C001|
+| 1922211198 | HEMANTH | M      | 2004-06-17 | 986534256 | VIZAG | C001|
++------------+---------+--------+------------+-----------+-------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select* from faculty where DOJ<'2014-11-01';
++-----------+---------+--------+------------+------------+-----------+--------+---------+------+
+| facno     | facname | Gender | DOB        | DOJ        | Mobileno  | deptno | resiged | age  |
++-----------+---------+--------+------------+------------+-----------+--------+---------+------+
+| 1191151   | mohan   | m      | 2004-01-12 | 2010-05-23 | 990826973 | mtr  | y       |   59 |
+| 1f1922112 | raju    | m      | 2005-02-13 | 2009-06-25 | 90865894  | mgr  | y       |   45 |
++-----------+---------+--------+------------+------------+-----------+--------+---------+------+
+2 rows in set (0.01 sec)
+
+mysql> select* from course where hallno!='H001';
++----------+----------------------+------------+-------+--------+-------+
+| courseno | coursedesc           | coursetype | semno | hallno | facno |
++----------+----------------------+------------+-------+--------+-------+
+| CS201    | Computer Science 201 | L          |     2 | H002   | F001  |
+| MA101    | Mathematics 101      | L          |     1 | H003   | F002  |
+| MA201    | Mathematics 201      | L          |     2 | H004   | F002  |
+| PH101    | Physics 101          | L          |     1 | H005   | F003  |
++----------+----------------------+------------+-------+--------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select* from student where Name like '%sh';
++----------+--------+--------+------------+-----------+------+----------+
+| Reg_no   | Name   | Gender | DOB        | Mobile_no | City | courseno |
++----------+--------+--------+------------+-----------+------+----------+
+| 19221153 | ramesh | m      | 2005-03-14 | 998263548 | mnr  | C002     |
++----------+--------+--------+------------+-----------+------+----------+
+1 row in set (0.01 sec)
+
+mysql> select* from student where Name like '%sh%';
++----------+--------+--------+------------+-----------+------+----------+
+| Reg_no   | Name   | Gender | DOB        | Mobile_no | City | courseno |
++----------+--------+--------+------------+-----------+------+----------+
+| 19221153 | ramesh | m      | 2005-03-14 | 998263548 | mnr  | C002     |
++----------+--------+--------+------------+-----------+------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * from student where City like "%SAL%";
++------------+------+--------+------------+-----------+-------+----------+
+| Reg_no     | Name | Gender | DOB        | Mobile_no | City  | courseno |
++------------+------+--------+------------+-----------+-------+----------+
+| 1922211123 | PUMA | M      | 2004-12-15 | 987654329 | SALT  | C001     |
+| 1922211125 | SUMA | F      | 2004-08-24 | 987654323 | BASAL | C001     |
++------------+------+--------+------------+-----------+-------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * from student where Name not like "______";
++------------+---------+--------+------------+-----------+----------+----------+
+| Reg_no     | Name    | Gender | DOB        | Mobile_no | City     | courseno |
++------------+---------+--------+------------+-----------+----------+----------+
+| 19221151   | mohan   | m      | 2004-01-12 | 998263541 | chittoor | C002   |
+| 19221152   | raju    | m      | 2005-02-13 | 998263542 | chittoor | C002   |
+| 19221154   | ram     | m      | 2006-04-14 | 908269279 | mgr      | C002   |
+| 19221155   | san     | m      | 2007-05-17 | 998263545 | chittoor | C002   |
+| 192219184  | siri    | f      | 2004-01-12 | 891938534 | chittoor | C002   |
+| 1922211123 | PUMA    | M      | 2004-12-15 | 987654329 | SALT     | C001   |
+| 1922211125 | SUMA    | F      | 2004-08-24 | 987654323 | BASAL    | C001   |
+| 1922211156 | RAMA    | F      | 2004-02-14 | 876543297 | KADAPA   | C002   |
+| 1922211198 | HEMANTH | M      | 2004-06-17 | 986534256 | VIZAG    | C001   |
++------------+---------+--------+------------+-----------+----------+----------+
+9 rows in set (0.00 sec)
+
+mysql> select* from student where Name like '%am%';
++------------+--------+--------+------------+-----------+--------+----------+
+| Reg_no     | Name   | Gender | DOB        | Mobile_no | City   | courseno|
++------------+--------+--------+------------+-----------+--------+----------+
+| 19221153   | ramesh | m      | 2005-03-14 | 998263548 | mnr    | C002|
+| 19221154   | ram    | m      | 2006-04-14 | 908269279 | mgr    | C002|
+| 1922211156 | RAMA   | F      | 2004-02-14 | 876543297 | KADAPA | C002|
++------------+--------+--------+------------+-----------+--------+----------+
+3 rows in set (0.00 sec)
+
+mysql>
